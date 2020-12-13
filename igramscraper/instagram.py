@@ -196,7 +196,8 @@ class Instagram:
     def __get_mid(self):
         """manually fetches the machine id from graphQL"""
         time.sleep(self.sleep_between_requests)
-        response = self.__req.get('https://www.instagram.com/web/__mid/')
+        response = self.__req.get('https://www.instagram.com/web/__mid/', headers=self.generate_headers(
+            self.user_session))
 
         if response.status_code != Instagram.HTTP_OK:
             raise InstagramException.default(response.text,
@@ -1325,7 +1326,7 @@ class Instagram:
 
         if force or not self.is_logged_in(session):
             time.sleep(self.sleep_between_requests)
-            response = self.__req.get(endpoints.BASE_URL)
+            response = self.__req.get(endpoints.BASE_URL, headers=self.generate_headers(self.user_session))
             if not response.status_code == Instagram.HTTP_OK:
                 raise InstagramException.default(response.text,
                                                  response.status_code)
